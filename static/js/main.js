@@ -61,15 +61,18 @@ document.addEventListener('DOMContentLoaded', function () {
       '<button id="lb-close" class="absolute top-4 right-4 text-white text-3xl font-bold z-10 hover:text-gold">&times;</button>' +
       '<button id="lb-prev" class="absolute left-4 text-white text-4xl font-bold z-10 hover:text-gold">&lsaquo;</button>' +
       '<button id="lb-next" class="absolute right-4 text-white text-4xl font-bold z-10 hover:text-gold">&rsaquo;</button>' +
-      '<div class="max-w-4xl max-h-[80vh] flex items-center justify-center">' +
-        '<div class="bg-navy-light w-96 h-64 flex items-center justify-center rounded-lg">' +
-          '<span class="text-6xl text-gold opacity-50">&#9633;</span>' +
-        '</div>' +
-      '</div>';
+      '<img id="lb-img" class="max-w-full max-h-[80vh] rounded-lg shadow-lg" src="" alt="Lightbox image">';
     document.body.appendChild(overlay);
 
-    function openLightbox(index) {
+    var lbImg = document.getElementById('lb-img');
+
+    function showImage(index) {
       currentIndex = index;
+      lbImg.src = images[index];
+    }
+
+    function openLightbox(index) {
+      showImage(index);
       overlay.classList.remove('hidden');
       overlay.classList.add('flex');
       document.body.style.overflow = 'hidden';
@@ -92,12 +95,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('lb-prev').addEventListener('click', function (e) {
       e.stopPropagation();
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage((currentIndex - 1 + images.length) % images.length);
     });
 
     document.getElementById('lb-next').addEventListener('click', function (e) {
       e.stopPropagation();
-      currentIndex = (currentIndex + 1) % images.length;
+      showImage((currentIndex + 1) % images.length);
     });
 
     document.addEventListener('keydown', function (e) {
