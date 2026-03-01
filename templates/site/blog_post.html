@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }} | {{ settings.business_name }}{% endblock %}
+{% block meta_description %}{{ item.excerpt }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ item.title }}",
+  "description": "{{ item.excerpt }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ item.author }}"
+  },
+  "datePublished": "{{ item.date }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ settings.business_name }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="bg-gray-100 py-3">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="text-sm text-gray-500">
+      <a href="/" class="hover:text-navy">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/blog.html" class="hover:text-navy">Blog</a>
+      <span class="mx-2">/</span>
+      <span class="text-navy font-medium">{{ item.title }}</span>
+    </nav>
+  </div>
+</div>
+
+<!-- Blog Post -->
+<article class="py-16">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center text-sm text-gray-500 mb-4">
+        <span>{{ item.date }}</span>
+        <span class="mx-2">&middot;</span>
+        <span class="text-gold font-medium">{{ item.category }}</span>
+        <span class="mx-2">&middot;</span>
+        <span>By {{ item.author }}</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold text-navy mb-4">{{ item.title }}</h1>
+    </div>
+
+    <!-- Featured Image -->
+    {% if item.featured_image %}
+    <img src="{{ item.featured_image }}" alt="{{ item.title }}"
+         class="w-full h-64 object-cover rounded-lg mb-8">
+    {% else %}
+    <div class="bg-navy h-64 rounded-lg flex items-center justify-center mb-8">
+      <span class="text-6xl text-gold opacity-50">&#9998;</span>
+    </div>
+    {% endif %}
+
+    <!-- YouTube Video -->
+    {% if item.youtube_url %}
+    <div class="mb-8">
+      <div class="relative w-full" style="padding-bottom: 56.25%;">
+        <iframe class="absolute inset-0 w-full h-full rounded-lg"
+                src="https://www.youtube.com/embed/{{ item.youtube_url | replace('https://www.youtube.com/watch?v=', '') | replace('https://youtu.be/', '') | replace('https://youtube.com/watch?v=', '') }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Content -->
+    <div class="prose">
+      {{ item.content | markdown }}
+    </div>
+
+    <!-- Tags -->
+    {% if item.tags %}
+    <div class="mt-8 pt-6 border-t">
+      <div class="flex flex-wrap gap-2">
+        {% for tag in item.tags %}
+        <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Prev/Next Navigation -->
+    <div class="mt-12 pt-8 border-t grid grid-cols-1 md:grid-cols-2 gap-6">
+      {% if item.prev %}
+      <a href="/blog/{{ item.prev.slug }}.html" class="group">
+        <span class="text-sm text-gray-500">&larr; Previous</span>
+        <p class="font-bold text-navy group-hover:text-gold transition-colors">{{ item.prev.title }}</p>
+      </a>
+      {% else %}
+      <div></div>
+      {% endif %}
+      {% if item.next %}
+      <a href="/blog/{{ item.next.slug }}.html" class="group text-right">
+        <span class="text-sm text-gray-500">Next &rarr;</span>
+        <p class="font-bold text-navy group-hover:text-gold transition-colors">{{ item.next.title }}</p>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</article>
+
+{% endblock %}

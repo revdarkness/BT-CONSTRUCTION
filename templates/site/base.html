@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ settings.seo.title }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ settings.seo.description }}{% endblock %}">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{% block og_title %}{{ settings.seo.title }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ settings.seo.description }}{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}{{ settings.seo.og_image }}{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta name="api-base" content="">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '{{ settings.colors.primary if settings.colors else "#1B3A5C" }}',
+            'navy-light': '{{ settings.colors.accent if settings.colors else "#244D78" }}',
+            'navy-dark': '#142C45',
+            gold: '{{ settings.colors.secondary if settings.colors else "#C8963E" }}',
+            'gold-light': '{{ settings.colors.accent if settings.colors else "#D4A94F" }}',
+            'gray-light': '#F5F5F5',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Dynamic color overrides -->
+  <style>
+    :root {
+      --color-primary: {{ settings.colors.primary if settings.colors else '#1B3A5C' }};
+      --color-secondary: {{ settings.colors.secondary if settings.colors else '#C8963E' }};
+      --color-accent: {{ settings.colors.accent if settings.colors else '#D4A94F' }};
+    }
+  </style>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/custom.css">
+
+  {% block structured_data %}{% endblock %}
+</head>
+<body class="flex flex-col min-h-screen bg-white text-gray-800">
+
+  <!-- Navigation -->
+  <nav class="bg-navy text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo / Business Name -->
+        <a href="/" class="flex items-center space-x-2">
+          <span class="text-2xl font-bold tracking-tight">{{ settings.business_name }}</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:flex items-center space-x-8">
+          <a href="/" class="hover:text-gold transition-colors font-medium">Home</a>
+          <a href="/services.html" class="hover:text-gold transition-colors font-medium">Services</a>
+          <a href="/portfolio.html" class="hover:text-gold transition-colors font-medium">Portfolio</a>
+          <a href="/about.html" class="hover:text-gold transition-colors font-medium">About</a>
+          <a href="/blog.html" class="hover:text-gold transition-colors font-medium">Blog</a>
+          <a href="/contact.html" class="hover:text-gold transition-colors font-medium">Contact</a>
+          <a href="tel:{{ settings.phone }}" class="bg-gold hover:bg-gold-light text-white px-5 py-2.5 rounded font-semibold transition-colors">
+            {{ settings.phone }}
+          </a>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button id="mobile-menu-btn" class="lg:hidden text-white focus:outline-none" aria-label="Toggle menu">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path id="hamburger-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-navy-dark border-t border-navy-light">
+      <div class="px-4 py-4 space-y-3">
+        <a href="/" class="block hover:text-gold transition-colors font-medium py-2">Home</a>
+        <a href="/services.html" class="block hover:text-gold transition-colors font-medium py-2">Services</a>
+        <a href="/portfolio.html" class="block hover:text-gold transition-colors font-medium py-2">Portfolio</a>
+        <a href="/about.html" class="block hover:text-gold transition-colors font-medium py-2">About</a>
+        <a href="/blog.html" class="block hover:text-gold transition-colors font-medium py-2">Blog</a>
+        <a href="/contact.html" class="block hover:text-gold transition-colors font-medium py-2">Contact</a>
+        <a href="tel:{{ settings.phone }}" class="block bg-gold hover:bg-gold-light text-white text-center px-5 py-2.5 rounded font-semibold transition-colors mt-4">
+          {{ settings.phone }}
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-navy text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Business Info -->
+        <div>
+          <h3 class="text-xl font-bold mb-4">{{ settings.business_name }}</h3>
+          <p class="text-gray-300 mb-2">{{ settings.address.street }}</p>
+          <p class="text-gray-300 mb-2">{{ settings.address.city }}, {{ settings.address.state }} {{ settings.address.zip }}</p>
+          <p class="text-gray-300 mb-2">
+            <a href="tel:{{ settings.phone }}" class="hover:text-gold transition-colors">{{ settings.phone }}</a>
+          </p>
+          <p class="text-gray-300">
+            <a href="mailto:{{ settings.email }}" class="hover:text-gold transition-colors">{{ settings.email }}</a>
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="/" class="text-gray-300 hover:text-gold transition-colors">Home</a></li>
+            <li><a href="/services.html" class="text-gray-300 hover:text-gold transition-colors">Services</a></li>
+            <li><a href="/portfolio.html" class="text-gray-300 hover:text-gold transition-colors">Portfolio</a></li>
+            <li><a href="/about.html" class="text-gray-300 hover:text-gold transition-colors">About</a></li>
+            <li><a href="/contact.html" class="text-gray-300 hover:text-gold transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Service Areas -->
+        <div>
+          <h3 class="text-xl font-bold mb-4">Service Areas</h3>
+          <ul class="space-y-2">
+            {% for area in settings.service_areas %}
+            <li class="text-gray-300">{{ area }}</li>
+            {% endfor %}
+          </ul>
+          {% if settings.license_number %}
+          <p class="text-gray-400 text-sm mt-4">License #{{ settings.license_number }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="border-t border-navy-light mt-8 pt-8 text-center text-gray-400 text-sm">
+        <p>&copy; {{ current_year }} {{ settings.business_name }}. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="/static/js/main.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

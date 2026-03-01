@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Our Services | {{ settings.business_name }}{% endblock %}
+{% block meta_description %}Explore our professional remodeling services: kitchen remodels, bathroom remodels, and whole-home renovations. {{ settings.years_experience }} years of trusted craftsmanship.{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Services</h1>
+    <p class="text-xl text-gray-200 max-w-2xl mx-auto">Professional remodeling and renovation services backed by {{ settings.years_experience }} years of experience.</p>
+  </div>
+</section>
+
+<!-- Services Grid -->
+<section class="py-20 bg-gray-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {% for service in services %}
+      <a href="/services/{{ service.slug }}.html" class="service-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 block">
+        <div class="bg-navy h-48 flex items-center justify-center">
+          <span class="text-5xl text-gold">&#9881;</span>
+        </div>
+        <div class="p-6">
+          <h2 class="text-xl font-bold text-navy mb-3">{{ service.title }}</h2>
+          <p class="text-gray-600 mb-4">{{ service.short_description }}</p>
+          <ul class="space-y-2 mb-4">
+            {% for feature in service.features[:3] %}
+            <li class="flex items-start text-sm text-gray-600">
+              <span class="text-gold mr-2 mt-0.5">&#10003;</span>
+              {{ feature }}
+            </li>
+            {% endfor %}
+          </ul>
+          <span class="text-gold hover:text-gold-light font-semibold transition-colors">
+            Learn More &rarr;
+          </span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20 bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
+    <p class="text-xl text-gray-300 mb-8">Contact us for a free consultation and estimate on your next project.</p>
+    <a href="/quote.html" class="bg-gold hover:bg-gold-light text-white px-8 py-4 rounded text-lg font-semibold transition-colors inline-block">
+      Request a Free Estimate
+    </a>
+  </div>
+</section>
+
+{% endblock %}

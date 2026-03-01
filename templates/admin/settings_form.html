@@ -1,0 +1,203 @@
+{% extends "admin/base.html" %}
+{% from "admin/partials/image_upload.html" import image_field, upload_script %}
+
+{% block title %}Settings{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <!-- Business Info -->
+        <div class="settings-section">
+            <h3>Business Information</h3>
+
+            <div class="form-group">
+                <label for="business_name">Business Name</label>
+                <input type="text" id="business_name" name="business_name" class="form-input"
+                       value="{{ settings.business_name or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="tagline">Tagline</label>
+                <input type="text" id="tagline" name="tagline" class="form-input"
+                       value="{{ settings.tagline or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" name="phone" class="form-input"
+                       value="{{ settings.phone or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-input"
+                       value="{{ settings.email or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="years_experience">Years of Experience</label>
+                <input type="number" id="years_experience" name="years_experience" class="form-input"
+                       value="{{ settings.years_experience or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="license_number">License Number</label>
+                <input type="text" id="license_number" name="license_number" class="form-input"
+                       value="{{ settings.license_number or '' }}">
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="settings-section">
+            <h3>Address</h3>
+
+            <div class="form-group">
+                <label for="address_street">Street</label>
+                <input type="text" id="address_street" name="address_street" class="form-input"
+                       value="{{ settings.address.street if settings.address else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="address_city">City</label>
+                <input type="text" id="address_city" name="address_city" class="form-input"
+                       value="{{ settings.address.city if settings.address else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="address_state">State</label>
+                <input type="text" id="address_state" name="address_state" class="form-input"
+                       value="{{ settings.address.state if settings.address else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="address_zip">ZIP Code</label>
+                <input type="text" id="address_zip" name="address_zip" class="form-input"
+                       value="{{ settings.address.zip if settings.address else '' }}">
+            </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="settings-section">
+            <h3>Social Links</h3>
+
+            <div class="form-group">
+                <label for="social_facebook">Facebook URL</label>
+                <input type="text" id="social_facebook" name="social_facebook" class="form-input"
+                       value="{{ settings.social.facebook if settings.social else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="social_instagram">Instagram URL</label>
+                <input type="text" id="social_instagram" name="social_instagram" class="form-input"
+                       value="{{ settings.social.instagram if settings.social else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="social_google_business">Google Business URL</label>
+                <input type="text" id="social_google_business" name="social_google_business" class="form-input"
+                       value="{{ settings.social.google_business if settings.social else '' }}">
+            </div>
+        </div>
+
+        <!-- SEO -->
+        <div class="settings-section">
+            <h3>SEO</h3>
+
+            <div class="form-group">
+                <label for="seo_title">Page Title</label>
+                <input type="text" id="seo_title" name="seo_title" class="form-input"
+                       value="{{ settings.seo.title if settings.seo else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="seo_description">Meta Description</label>
+                <textarea id="seo_description" name="seo_description" class="form-textarea" rows="3">{{ settings.seo.description if settings.seo else '' }}</textarea>
+            </div>
+
+            {{ image_field("seo_og_image", settings.seo.og_image if settings.seo else '', "OG Image") }}
+        </div>
+
+        <!-- Site Colors -->
+        <div class="settings-section">
+            <h3>Site Colors</h3>
+
+            <div class="form-group">
+                <label for="color_primary">Primary Color (Navy — nav, headings, buttons)</label>
+                <div class="color-picker-group">
+                    <input type="color" id="color_primary_picker"
+                           value="{{ settings.colors.primary if settings.colors else '#1B3A5C' }}"
+                           onchange="document.getElementById('color_primary').value = this.value">
+                    <input type="text" id="color_primary" name="color_primary" class="form-input"
+                           value="{{ settings.colors.primary if settings.colors else '#1B3A5C' }}"
+                           onchange="document.getElementById('color_primary_picker').value = this.value">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="color_secondary">Secondary Color (Gold — accents, CTAs, links)</label>
+                <div class="color-picker-group">
+                    <input type="color" id="color_secondary_picker"
+                           value="{{ settings.colors.secondary if settings.colors else '#C8963E' }}"
+                           onchange="document.getElementById('color_secondary').value = this.value">
+                    <input type="text" id="color_secondary" name="color_secondary" class="form-input"
+                           value="{{ settings.colors.secondary if settings.colors else '#C8963E' }}"
+                           onchange="document.getElementById('color_secondary_picker').value = this.value">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="color_accent">Accent Color (Gold Light — hover states)</label>
+                <div class="color-picker-group">
+                    <input type="color" id="color_accent_picker"
+                           value="{{ settings.colors.accent if settings.colors else '#D4A94F' }}"
+                           onchange="document.getElementById('color_accent').value = this.value">
+                    <input type="text" id="color_accent" name="color_accent" class="form-input"
+                           value="{{ settings.colors.accent if settings.colors else '#D4A94F' }}"
+                           onchange="document.getElementById('color_accent_picker').value = this.value">
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Areas -->
+        <div class="settings-section">
+            <h3>Service Areas</h3>
+
+            <div class="form-group">
+                <div id="service-areas-list">
+                    {% if settings.service_areas %}
+                    {% for area in settings.service_areas %}
+                    <div class="array-row">
+                        <input type="text" name="service_areas" class="form-input" value="{{ area }}">
+                        <button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <button type="button" class="btn-secondary btn-sm mt-2" onclick="addArea()">+ Add Area</button>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 mt-2 mb-8">
+            <button type="submit" class="btn-primary">Save Settings</button>
+        </div>
+    </form>
+
+</div>
+
+{{ upload_script() }}
+<script>
+function addArea() {
+    var list = document.getElementById('service-areas-list');
+    var row = document.createElement('div');
+    row.className = 'array-row';
+    row.innerHTML = '<input type="text" name="service_areas" class="form-input" placeholder="Enter a service area">' +
+                    '<button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>';
+    list.appendChild(row);
+    row.querySelector('input').focus();
+}
+</script>
+{% endblock %}

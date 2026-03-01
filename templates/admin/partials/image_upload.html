@@ -1,0 +1,111 @@
+{% macro image_field(name, value, label, placeholder="/static/img/...") %}
+<div class="form-group">
+    <label for="{{ name }}">{{ label }}</label>
+    <div class="image-upload-widget">
+        <div class="image-upload-row">
+            <input type="text" id="{{ name }}" name="{{ name }}" class="form-input"
+                   value="{{ value or '' }}" placeholder="{{ placeholder }}">
+            <button type="button" class="btn-secondary btn-sm image-upload-btn"
+                    onclick="triggerUpload('{{ name }}')">Upload</button>
+        </div>
+        <div class="image-upload-preview" id="{{ name }}_preview"
+             style="{{ 'display:block' if value else 'display:none' }}">
+            {% if value %}
+            <img src="{{ value }}" alt="Preview">
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro image_field_array_item(value) %}
+<div class="array-row">
+    <div class="image-upload-widget" style="flex:1">
+        <div class="image-upload-row">
+            <input type="text" name="images" class="form-input"
+                   value="{{ value or '' }}" placeholder="/static/img/..."
+                   onchange="updateArrayPreview(this)">
+            <button type="button" class="btn-secondary btn-sm image-upload-btn"
+                    onclick="triggerArrayUpload(this)">Upload</button>
+        </div>
+        <div class="image-upload-preview" style="{{ 'display:block' if value else 'display:none' }}">
+            {% if value %}
+            <img src="{{ value }}" alt="Preview">
+            {% endif %}
+        </div>
+    </div>
+    <button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>
+</div>
+{% endmacro %}
+
+{% macro upload_script() %}
+<input type="file" id="file-upload-input" accept=".jpg,.jpeg,.png,.gif,.webp" style="display:none">
+<script>
+var _uploadTarget = null;
+var _uploadInput = document.getElementById('file-upload-input');
+
+function triggerUpload(inputId) {
+    _uploadTarget = { type: 'single', inputId: inputId };
+    _uploadInput.click();
+}
+
+function triggerArrayUpload(btn) {
+    _uploadTarget = { type: 'array', row: btn.closest('.array-row') };
+    _uploadInput.click();
+}
+
+_uploadInput.addEventListener('change', function() {
+    if (!this.files.length || !_uploadTarget) return;
+
+    var file = this.files[0];
+    var formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/admin/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        if (_uploadTarget.type === 'single') {
+            var input = document.getElementById(_uploadTarget.inputId);
+            input.value = data.path;
+            var preview = document.getElementById(_uploadTarget.inputId + '_preview');
+            if (preview) {
+                preview.style.display = 'block';
+                preview.innerHTML = '<img src="' + data.path + '" alt="Preview">';
+            }
+        } else if (_uploadTarget.type === 'array') {
+            var row = _uploadTarget.row;
+            var input = row.querySelector('input[name="images"]');
+            input.value = data.path;
+            var preview = row.querySelector('.image-upload-preview');
+            if (preview) {
+                preview.style.display = 'block';
+                preview.innerHTML = '<img src="' + data.path + '" alt="Preview">';
+            }
+        }
+    })
+    .catch(function(err) {
+        alert('Upload failed: ' + err.message);
+    });
+
+    this.value = '';
+});
+
+function updateArrayPreview(input) {
+    var preview = input.closest('.image-upload-widget').querySelector('.image-upload-preview');
+    if (input.value) {
+        preview.style.display = 'block';
+        preview.innerHTML = '<img src="' + input.value + '" alt="Preview">';
+    } else {
+        preview.style.display = 'none';
+        preview.innerHTML = '';
+    }
+}
+</script>
+{% endmacro %}

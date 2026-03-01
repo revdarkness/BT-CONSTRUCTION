@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}About Us | {{ settings.business_name }}{% endblock %}
+{% block meta_description %}Learn about Calvin Berry and BT Construction — {{ settings.years_experience }} years of trusted craftsmanship in kitchen remodels, bathroom renovations, and home restorations.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "{{ settings.business_name }}",
+  "description": "{{ settings.seo.description }}",
+  "telephone": "{{ settings.phone }}",
+  "email": "{{ settings.email }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ settings.address.street }}",
+    "addressLocality": "{{ settings.address.city }}",
+    "addressRegion": "{{ settings.address.state }}",
+    "postalCode": "{{ settings.address.zip }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">About {{ settings.business_name }}</h1>
+    <p class="text-xl text-gray-200 max-w-2xl mx-auto">{{ about.headline }}</p>
+  </div>
+</section>
+
+<!-- Story Section -->
+<section class="py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="text-3xl font-bold text-navy mb-6">Our Story</h2>
+        {% for paragraph in about.story.split('\n\n') %}
+        <p class="text-gray-700 text-lg leading-relaxed mb-4">{{ paragraph }}</p>
+        {% endfor %}
+      </div>
+      <div class="bg-navy-light h-80 rounded-lg flex items-center justify-center">
+        <span class="text-6xl text-gold opacity-50">&#9633;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience Callout -->
+<section class="bg-gold text-white py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <div>
+        <p class="text-4xl font-bold">{{ settings.years_experience }}+</p>
+        <p class="text-lg mt-1 opacity-90">Years of Experience</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold">500+</p>
+        <p class="text-lg mt-1 opacity-90">Projects Completed</p>
+      </div>
+      <div>
+        <p class="text-4xl font-bold">100%</p>
+        <p class="text-lg mt-1 opacity-90">Satisfaction Guarantee</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values Grid -->
+<section class="py-20 bg-gray-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-navy text-center mb-12">Our Values</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {% for value in about.core_values %}
+      <div class="bg-white rounded-lg shadow-md p-8">
+        <h3 class="text-xl font-bold text-navy mb-3">{{ value.title }}</h3>
+        <p class="text-gray-600">{{ value.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Milestones Timeline -->
+<section class="py-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-navy text-center mb-12">Our Journey</h2>
+    <div class="space-y-8">
+      {% for milestone in about.milestones %}
+      <div class="timeline-item relative pl-8 pb-8 border-l-2 border-gold last:pb-0">
+        <div class="absolute -left-2 top-0 w-4 h-4 bg-gold rounded-full"></div>
+        <span class="text-gold font-bold text-lg">{{ milestone.year }}</span>
+        <h3 class="text-xl font-bold text-navy mt-1">{{ milestone.title }}</h3>
+        <p class="text-gray-600 mt-2">{{ milestone.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="py-20 bg-gray-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-navy text-center mb-12">What Our Clients Say</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {% for testimonial in testimonials %}
+      <div class="bg-white rounded-lg shadow-md p-8">
+        <div class="flex mb-4">
+          {% for i in range(testimonial.rating) %}
+          <span class="text-gold text-xl">&#9733;</span>
+          {% endfor %}
+        </div>
+        <p class="text-gray-600 italic mb-6">"{{ testimonial.text }}"</p>
+        <div class="border-t pt-4">
+          <p class="font-bold text-navy">{{ testimonial.name }}</p>
+          <p class="text-sm text-gray-500">{{ testimonial.project_type }} — {{ testimonial.location }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="py-20 bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Work with Us?</h2>
+    <p class="text-xl text-gray-300 mb-8">Experience the difference that {{ settings.years_experience }} years of dedication makes.</p>
+    <a href="/quote.html" class="bg-gold hover:bg-gold-light text-white px-8 py-4 rounded text-lg font-semibold transition-colors inline-block">
+      Request a Free Estimate
+    </a>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{
+  "slug": "victorian-home-restoration",
+  "title": "Victorian Home Restoration",
+  "category": "Renovation & Restoration",
+  "short_description": "A careful restoration of an 1890s Victorian home, preserving original woodwork and character while upgrading all major systems.",
+  "description": "This beautiful Victorian home needed significant structural work and system upgrades while preserving its historic character. We restored original hardwood floors, repaired ornate trim and moldings, upgraded the electrical and plumbing systems, and added modern insulation — all while maintaining the home's 130-year-old charm.",
+  "featured": true,
+  "completion_date": "2024-03-10",
+  "location": "Your City, ST",
+  "images": [
+    "/static/img/placeholder-portfolio-3.jpg"
+  ],
+  "before_after": false
+}

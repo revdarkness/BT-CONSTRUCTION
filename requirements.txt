@@ -1,0 +1,7 @@
+Jinja2
+Pillow
+Flask
+flask-wtf
+bcrypt
+markdown
+python-slugify

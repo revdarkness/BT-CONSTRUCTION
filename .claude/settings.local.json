@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(start:*)",
+      "Bash(powershell:*)",
+      "Bash(cscript:*)",
+      "Bash(pip show:*)",
+      "Bash(curl:*)"
+    ]
+  }
+}

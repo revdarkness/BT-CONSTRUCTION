@@ -1,0 +1,129 @@
+{% extends "admin/base.html" %}
+{% from "admin/partials/image_upload.html" import image_field, image_field_array_item, upload_script %}
+
+{% block title %}{{ 'Edit' if item else 'New' }} Portfolio Project{% endblock %}
+{% block page_title %}{{ 'Edit' if item else 'New' }} Portfolio Project{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="bg-white rounded-xl border border-gray-200 p-8">
+
+            <div class="form-group">
+                <label for="title">Project Title</label>
+                <input type="text" id="title" name="title" class="form-input" required
+                       value="{{ item.title if item else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" class="form-input"
+                       value="{{ item.category if item else '' }}" placeholder="e.g. Kitchen Remodel">
+            </div>
+
+            <div class="form-group">
+                <label for="short_description">Short Description</label>
+                <input type="text" id="short_description" name="short_description" class="form-input"
+                       value="{{ item.short_description if item else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Full Description</label>
+                <textarea id="description" name="description" class="form-textarea" rows="5">{{ item.description if item else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="completion_date">Completion Date</label>
+                <input type="date" id="completion_date" name="completion_date" class="form-input"
+                       value="{{ item.completion_date if item else today }}">
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" class="form-input"
+                       value="{{ item.location if item else '' }}" placeholder="City, State">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="featured" class="form-checkbox"
+                           {{ 'checked' if item and item.featured else '' }}>
+                    Featured project
+                </label>
+            </div>
+
+            <!-- Images array with upload -->
+            <div class="form-group">
+                <label>Project Images</label>
+                <div id="images-list">
+                    {% if item and item.images %}
+                    {% for img in item.images %}
+                    {{ image_field_array_item(img) }}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <button type="button" class="btn-secondary btn-sm mt-2" onclick="addImage()">+ Add Image</button>
+            </div>
+
+            <!-- YouTube URL -->
+            <div class="form-group">
+                <label for="youtube_url">YouTube Video URL</label>
+                <input type="text" id="youtube_url" name="youtube_url" class="form-input"
+                       value="{{ item.youtube_url if item else '' }}" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+
+            <!-- Before/After -->
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="before_after" class="form-checkbox" id="before_after_toggle"
+                           {{ 'checked' if item and item.before_after else '' }}
+                           onchange="toggleBeforeAfter()">
+                    Has before &amp; after photos
+                </label>
+            </div>
+
+            <div id="before-after-fields" style="{{ '' if item and item.before_after else 'display:none' }}">
+                {{ image_field("before_image", item.before_image if item else '', "Before Image") }}
+                {{ image_field("after_image", item.after_image if item else '', "After Image") }}
+            </div>
+
+        </div>
+
+        <div class="flex items-center gap-4 mt-6">
+            <button type="submit" class="btn-primary">
+                {{ 'Save Changes' if item else 'Create Project' }}
+            </button>
+            <a href="{{ url_for('portfolio_list') }}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+
+</div>
+
+{{ upload_script() }}
+<script>
+function addImage() {
+    var list = document.getElementById('images-list');
+    var row = document.createElement('div');
+    row.className = 'array-row';
+    row.innerHTML = '<div class="image-upload-widget" style="flex:1">' +
+                    '<div class="image-upload-row">' +
+                    '<input type="text" name="images" class="form-input" placeholder="/static/img/..." onchange="updateArrayPreview(this)">' +
+                    '<button type="button" class="btn-secondary btn-sm image-upload-btn" onclick="triggerArrayUpload(this)">Upload</button>' +
+                    '</div>' +
+                    '<div class="image-upload-preview"></div>' +
+                    '</div>' +
+                    '<button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>';
+    list.appendChild(row);
+    row.querySelector('input').focus();
+}
+
+function toggleBeforeAfter() {
+    var fields = document.getElementById('before-after-fields');
+    var toggle = document.getElementById('before_after_toggle');
+    fields.style.display = toggle.checked ? '' : 'none';
+}
+</script>
+{% endblock %}

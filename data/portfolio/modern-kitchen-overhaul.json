@@ -1,0 +1,16 @@
+{
+  "slug": "modern-kitchen-overhaul",
+  "title": "Modern Kitchen Overhaul",
+  "category": "Kitchen Remodel",
+  "short_description": "A complete kitchen transformation featuring custom white shaker cabinets, quartz countertops, and a spacious island with seating.",
+  "description": "This dated 1990s kitchen was completely gutted and rebuilt with a modern open layout. The homeowners wanted a bright, functional space for cooking and entertaining. We installed custom white shaker cabinets, quartz countertops, a large island with bar seating, and new hardwood flooring throughout.",
+  "featured": true,
+  "completion_date": "2024-06-15",
+  "location": "Your City, ST",
+  "images": [
+    "/static/img/placeholder-portfolio-1.jpg"
+  ],
+  "before_after": true,
+  "before_image": "/static/img/placeholder-kitchen-before.jpg",
+  "after_image": "/static/img/placeholder-kitchen-after.jpg"
+}

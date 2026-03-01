@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Blog | {{ settings.business_name }}{% endblock %}
+{% block meta_description %}Home remodeling tips, project planning advice, and renovation insights from {{ settings.business_name }}. {{ settings.years_experience }} years of experience shared.{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Blog</h1>
+    <p class="text-xl text-gray-200 max-w-2xl mx-auto">Tips, guides, and insights from {{ settings.years_experience }} years of remodeling experience.</p>
+  </div>
+</section>
+
+<!-- Blog Posts -->
+<section class="py-20 bg-gray-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for post in all_blog_posts %}
+      <a href="/blog/{{ post.slug }}.html" class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 block hover:-translate-y-1 hover:shadow-lg">
+        <div class="bg-navy h-48 flex items-center justify-center">
+          <span class="text-5xl text-gold opacity-50">&#9998;</span>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center text-sm text-gray-500 mb-3">
+            <span>{{ post.date }}</span>
+            <span class="mx-2">&middot;</span>
+            <span class="text-gold font-medium">{{ post.category }}</span>
+          </div>
+          <h2 class="text-xl font-bold text-navy mb-3">{{ post.title }}</h2>
+          <p class="text-gray-600 text-sm mb-4">{{ post.excerpt }}</p>
+          <span class="text-gold font-semibold">Read More &rarr;</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

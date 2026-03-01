@@ -1,0 +1,59 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+
+    <div class="mb-6">
+        <p class="text-gray-500">{{ items|length }} submission{{ 's' if items|length != 1 else '' }}</p>
+    </div>
+
+    {% if items %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.date or '' }}</td>
+                <td class="font-semibold">{{ item.name or '' }}</td>
+                <td>{{ item.email or '' }}</td>
+                <td>
+                    {% if item.read %}<span class="badge-read">Read</span>
+                    {% else %}<span class="badge-unread">New</span>{% endif %}
+                </td>
+                <td>
+                    <div class="flex gap-2">
+                        {% if kind == 'contact' %}
+                        <a href="{{ url_for('contact_detail', slug=item.slug) }}" class="btn-secondary btn-sm">View</a>
+                        <form method="POST" action="{{ url_for('contact_delete', slug=item.slug) }}" onsubmit="return confirm('Delete this submission?')">
+                        {% else %}
+                        <a href="{{ url_for('quotes_detail', slug=item.slug) }}" class="btn-secondary btn-sm">View</a>
+                        <form method="POST" action="{{ url_for('quotes_delete', slug=item.slug) }}" onsubmit="return confirm('Delete this submission?')">
+                        {% endif %}
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn-delete btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="bg-white rounded-xl p-12 text-center">
+        <p class="text-gray-500 text-lg">No submissions yet.</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

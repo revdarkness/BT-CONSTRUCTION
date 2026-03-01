@@ -1,0 +1,16 @@
+{
+  "slug": "spa-bathroom-retreat",
+  "title": "Spa Bathroom Retreat",
+  "category": "Bathroom Remodel",
+  "short_description": "A master bathroom transformed into a luxurious spa retreat with a walk-in rain shower, freestanding tub, and heated tile floors.",
+  "description": "The homeowners wanted their master bathroom to feel like a high-end spa. We designed and built a walk-in rain shower with natural stone tile, installed a freestanding soaking tub, added heated tile floors, and finished with a custom double vanity with vessel sinks.",
+  "featured": true,
+  "completion_date": "2024-09-20",
+  "location": "Neighboring Town, ST",
+  "images": [
+    "/static/img/placeholder-portfolio-2.jpg"
+  ],
+  "before_after": true,
+  "before_image": "/static/img/placeholder-bath-before.jpg",
+  "after_image": "/static/img/placeholder-bath-after.jpg"
+}

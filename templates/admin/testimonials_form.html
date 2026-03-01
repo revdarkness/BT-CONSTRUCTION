@@ -1,0 +1,73 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Edit' if item else 'New' }} Testimonial{% endblock %}
+{% block page_title %}{{ 'Edit' if item else 'New' }} Testimonial{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="bg-white rounded-xl border border-gray-200 p-8">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" class="form-input" required
+                       value="{{ item.name if item else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" class="form-input"
+                       value="{{ item.location if item else '' }}" placeholder="City, State">
+            </div>
+
+            <div class="form-group">
+                <label for="project_type">Project Type</label>
+                <input type="text" id="project_type" name="project_type" class="form-input"
+                       value="{{ item.project_type if item else '' }}" placeholder="e.g. Kitchen Remodel">
+            </div>
+
+            <div class="form-group">
+                <label for="rating">Rating</label>
+                <select id="rating" name="rating" class="form-select">
+                    {% for r in range(5, 0, -1) %}
+                    <option value="{{ r }}" {{ 'selected' if item and item.rating == r else '' }}>
+                        {{ '★' * r }}{{ '☆' * (5 - r) }} ({{ r }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="text">Testimonial Text</label>
+                <textarea id="text" name="text" class="form-textarea" rows="5" required>{{ item.text if item else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" class="form-input"
+                       value="{{ item.date if item else today }}">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="featured" class="form-checkbox"
+                           {{ 'checked' if item and item.featured else '' }}>
+                    Featured testimonial
+                </label>
+            </div>
+
+        </div>
+
+        <div class="flex items-center gap-4 mt-6">
+            <button type="submit" class="btn-primary">
+                {{ 'Save Changes' if item else 'Create Testimonial' }}
+            </button>
+            <a href="{{ url_for('testimonials_list') }}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

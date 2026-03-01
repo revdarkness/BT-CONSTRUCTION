@@ -1,0 +1,58 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Blog Posts{% endblock %}
+{% block page_title %}Blog Posts{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-gray-500">{{ items|length }} post{{ 's' if items|length != 1 else '' }}</p>
+        <a href="{{ url_for('blog_new') }}" class="btn-primary">+ Add Blog Post</a>
+    </div>
+
+    {% if items %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Featured</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="font-semibold">{{ item.title }}</td>
+                <td>{{ item.author }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.date }}</td>
+                <td>
+                    {% if item.featured %}<span class="badge-yes">Yes</span>
+                    {% else %}<span class="badge-no">No</span>{% endif %}
+                </td>
+                <td>
+                    <div class="flex gap-2">
+                        <a href="{{ url_for('blog_edit', slug=item.slug) }}" class="btn-secondary btn-sm">Edit</a>
+                        <form method="POST" action="{{ url_for('blog_delete', slug=item.slug) }}" onsubmit="return confirm('Delete this blog post?')">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn-delete btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="bg-white rounded-xl p-12 text-center">
+        <p class="text-gray-500 text-lg mb-4">No blog posts yet.</p>
+        <a href="{{ url_for('blog_new') }}" class="btn-primary">Write Your First Post</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

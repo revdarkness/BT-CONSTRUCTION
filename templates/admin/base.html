@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} — BT Construction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { DEFAULT: '#1B3A5C', light: '#244D78', dark: '#142C45' },
+                        gold: { DEFAULT: '#C8963E', light: '#D4A94F' },
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-navy-dark text-white flex-shrink-0 hidden lg:flex flex-col min-h-screen">
+        <div class="p-6 border-b border-navy-light">
+            <h1 class="text-xl font-bold text-gold">BT Construction</h1>
+            <p class="text-sm text-gray-300 mt-1">Admin Panel</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                <span class="text-lg mr-3">📊</span> Dashboard
+            </a>
+            <a href="{{ url_for('portfolio_list') }}" class="sidebar-link {% if request.endpoint in ('portfolio_list', 'portfolio_new', 'portfolio_edit') %}active{% endif %}">
+                <span class="text-lg mr-3">🏗️</span> Portfolio
+            </a>
+            <a href="{{ url_for('testimonials_list') }}" class="sidebar-link {% if request.endpoint in ('testimonials_list', 'testimonial_new', 'testimonial_edit') %}active{% endif %}">
+                <span class="text-lg mr-3">⭐</span> Testimonials
+            </a>
+            <a href="{{ url_for('services_list') }}" class="sidebar-link {% if request.endpoint in ('services_list', 'service_new', 'service_edit') %}active{% endif %}">
+                <span class="text-lg mr-3">🔧</span> Services
+            </a>
+            <a href="{{ url_for('blog_list') }}" class="sidebar-link {% if request.endpoint in ('blog_list', 'blog_new', 'blog_edit') %}active{% endif %}">
+                <span class="text-lg mr-3">📝</span> Blog Posts
+            </a>
+            <hr class="border-navy-light my-3">
+            <a href="{{ url_for('contact_list') }}" class="sidebar-link {% if request.endpoint in ('contact_list', 'contact_detail') %}active{% endif %}">
+                <span class="text-lg mr-3">📬</span> Contact Messages
+            </a>
+            <a href="{{ url_for('quotes_list') }}" class="sidebar-link {% if request.endpoint in ('quotes_list', 'quotes_detail') %}active{% endif %}">
+                <span class="text-lg mr-3">📋</span> Quote Requests
+            </a>
+            <hr class="border-navy-light my-3">
+            <a href="{{ url_for('admin_settings') }}" class="sidebar-link {% if request.endpoint == 'admin_settings' %}active{% endif %}">
+                <span class="text-lg mr-3">⚙️</span> Settings
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col min-h-screen">
+        <!-- Top bar -->
+        <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="document.querySelector('aside').classList.toggle('hidden')" class="lg:hidden text-navy text-2xl">☰</button>
+                <h2 class="text-lg font-semibold text-navy">{% block page_title %}Dashboard{% endblock %}</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-500">Logged in as <strong>Calvin</strong></span>
+                <a href="{{ url_for('logout') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded text-sm font-medium transition">Logout</a>
+            </div>
+        </header>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="px-6 pt-4 space-y-2">
+            {% for category, message in messages %}
+            <div class="flash-{{ category }} rounded-lg px-4 py-3 text-sm font-medium">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Page content -->
+        <main class="flex-1 p-6">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="px-6 py-4 text-center text-xs text-gray-400">
+            BT Construction Admin &copy; {{ now().year if now is defined else 2026 }}
+        </footer>
+    </div>
+
+</body>
+</html>

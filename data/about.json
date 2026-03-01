@@ -1,0 +1,49 @@
+{
+  "headline": "Building Trust Since 1974",
+  "story": "Calvin Berry founded BT Construction over 50 years ago with a simple belief: do honest work, treat people right, and never cut corners. What started as a one-man operation working on homes across the Dallas–Fort Worth area has grown into a trusted remodeling company known for quality craftsmanship and integrity.\n\nCalvin learned the trade from his father, carrying on a family tradition of building things that last. Over five decades, BT Construction has completed hundreds of kitchen remodels, bathroom transformations, and whole-home renovations — each one reflecting the same commitment to excellence that Calvin brought to his very first job.\n\nToday, BT Construction continues to serve homeowners across Dallas, Plano, Carrollton, and the surrounding communities. Every project is personally overseen to ensure it meets the high standards our clients expect and deserve.",
+  "story_image": "/static/img/placeholder-about.jpg",
+  "core_values": [
+    {
+      "title": "Integrity",
+      "description": "We say what we mean and do what we say. Honest communication and transparent pricing are the foundation of every project.",
+      "icon": "shield"
+    },
+    {
+      "title": "Craftsmanship",
+      "description": "50 years of hands-on experience means we know the right way to do things. We take pride in work that stands the test of time.",
+      "icon": "hammer"
+    },
+    {
+      "title": "Respect",
+      "description": "Your home is your sanctuary. We treat every property with care, keep job sites clean, and respect your family's daily life.",
+      "icon": "home"
+    },
+    {
+      "title": "Reliability",
+      "description": "We show up on time, stick to the plan, and finish what we start. You can count on us from the first call to the final walkthrough.",
+      "icon": "clock"
+    }
+  ],
+  "milestones": [
+    {
+      "year": "1974",
+      "title": "Company Founded",
+      "description": "Calvin Berry starts BT Construction, taking on his first kitchen remodel in the Dallas area."
+    },
+    {
+      "year": "1990",
+      "title": "500th Project Completed",
+      "description": "BT Construction reaches a major milestone, with hundreds of satisfied homeowners across North Texas."
+    },
+    {
+      "year": "2010",
+      "title": "Historic Restoration Specialty",
+      "description": "The company expands its expertise to include historic home restoration, preserving the character of older North Texas homes."
+    },
+    {
+      "year": "2024",
+      "title": "50 Years of Service",
+      "description": "BT Construction celebrates half a century of quality craftsmanship and trusted service to the community."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "new-service",
+  "title": "New Service",
+  "short_description": "This is a new service",
+  "description": "We offer for your convenience, this new service",
+  "icon": "roofing",
+  "image": "",
+  "featured": false,
+  "features": [
+    "Reliability",
+    "Timely"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "renovation-restoration",
+  "title": "Renovation & Restoration",
+  "short_description": "Breathe new life into your home with full renovations and careful restorations that honor your property's character while adding modern comfort.",
+  "description": "BT Construction specializes in whole-home renovations and historic restorations. We preserve the character of older homes while upgrading systems, layouts, and finishes to meet modern standards of comfort and efficiency.",
+  "icon": "renovation",
+  "featured": true,
+  "image": "/static/img/placeholder-renovation.jpg",
+  "features": [
+    "Whole-home renovations",
+    "Historic restoration and preservation",
+    "Structural repairs and reinforcement",
+    "Room additions and layout changes",
+    "System upgrades (electrical, plumbing, HVAC)"
+  ]
+}

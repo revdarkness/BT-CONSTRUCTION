@@ -1,0 +1,16 @@
+{
+  "slug": "kitchen-remodels",
+  "title": "Kitchen Remodels",
+  "short_description": "Transform your kitchen into the heart of your home with custom cabinetry, modern countertops, and thoughtful layouts designed for how you live.",
+  "description": "From complete gut renovations to targeted upgrades, BT Construction delivers kitchen remodels that combine beauty and functionality. With 50 years of experience, we handle every detail — cabinets, countertops, flooring, lighting, plumbing, and electrical.",
+  "icon": "kitchen",
+  "featured": true,
+  "image": "/static/img/placeholder-kitchen.jpg",
+  "features": [
+    "Custom cabinetry and storage solutions",
+    "Granite, quartz, and butcher block countertops",
+    "Tile and hardwood flooring",
+    "Modern lighting and electrical upgrades",
+    "Plumbing and fixture installation"
+  ]
+}

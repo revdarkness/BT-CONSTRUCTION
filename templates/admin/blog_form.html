@@ -1,0 +1,106 @@
+{% extends "admin/base.html" %}
+{% from "admin/partials/image_upload.html" import image_field, upload_script %}
+
+{% block title %}{{ 'Edit' if item else 'New' }} Blog Post{% endblock %}
+{% block page_title %}{{ 'Edit' if item else 'New' }} Blog Post{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="bg-white rounded-xl border border-gray-200 p-8">
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" class="form-input" required
+                       value="{{ item.title if item else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" name="author" class="form-input"
+                       value="{{ item.author if item else 'Calvin Berry' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" class="form-input"
+                       value="{{ item.date if item else today }}">
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" class="form-input"
+                       value="{{ item.category if item else '' }}" placeholder="e.g. Kitchen, Bathroom, Tips">
+            </div>
+
+            {{ image_field("featured_image", item.featured_image if item else '', "Featured Image") }}
+
+            <!-- YouTube URL -->
+            <div class="form-group">
+                <label for="youtube_url">YouTube Video URL</label>
+                <input type="text" id="youtube_url" name="youtube_url" class="form-input"
+                       value="{{ item.youtube_url if item else '' }}" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+
+            <div class="form-group">
+                <label for="excerpt">Excerpt</label>
+                <textarea id="excerpt" name="excerpt" class="form-textarea" rows="3">{{ item.excerpt if item else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content (Markdown)</label>
+                <textarea id="content" name="content" class="form-textarea" rows="18" style="font-family: monospace; min-height: 400px;">{{ item.content if item else '' }}</textarea>
+            </div>
+
+            <!-- Tags array -->
+            <div class="form-group">
+                <label>Tags</label>
+                <div id="tags-list">
+                    {% if item and item.tags %}
+                    {% for tag in item.tags %}
+                    <div class="array-row">
+                        <input type="text" name="tags" class="form-input" value="{{ tag }}">
+                        <button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <button type="button" class="btn-secondary btn-sm mt-2" onclick="addTag()">+ Add Tag</button>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="featured" class="form-checkbox"
+                           {{ 'checked' if item and item.featured else '' }}>
+                    Featured post
+                </label>
+            </div>
+
+        </div>
+
+        <div class="flex items-center gap-4 mt-6">
+            <button type="submit" class="btn-primary">
+                {{ 'Save Changes' if item else 'Create Post' }}
+            </button>
+            <a href="{{ url_for('blog_list') }}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+
+</div>
+
+{{ upload_script() }}
+<script>
+function addTag() {
+    var list = document.getElementById('tags-list');
+    var row = document.createElement('div');
+    row.className = 'array-row';
+    row.innerHTML = '<input type="text" name="tags" class="form-input" placeholder="Enter a tag">' +
+                    '<button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>';
+    list.appendChild(row);
+    row.querySelector('input').focus();
+}
+</script>
+{% endblock %}

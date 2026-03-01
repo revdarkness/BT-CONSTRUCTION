@@ -1,0 +1,58 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Portfolio{% endblock %}
+{% block page_title %}Portfolio{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-gray-500">{{ items|length }} project{{ 's' if items|length != 1 else '' }}</p>
+        <a href="{{ url_for('portfolio_new') }}" class="btn-primary">+ Add Project</a>
+    </div>
+
+    {% if items %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Featured</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="font-semibold">{{ item.title }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.location }}</td>
+                <td>
+                    {% if item.featured %}<span class="badge-yes">Yes</span>
+                    {% else %}<span class="badge-no">No</span>{% endif %}
+                </td>
+                <td>{{ item.completion_date }}</td>
+                <td>
+                    <div class="flex gap-2">
+                        <a href="{{ url_for('portfolio_edit', slug=item.slug) }}" class="btn-secondary btn-sm">Edit</a>
+                        <form method="POST" action="{{ url_for('portfolio_delete', slug=item.slug) }}" onsubmit="return confirm('Delete this project?')">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn-delete btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="bg-white rounded-xl p-12 text-center">
+        <p class="text-gray-500 text-lg mb-4">No portfolio projects yet.</p>
+        <a href="{{ url_for('portfolio_new') }}" class="btn-primary">Add Your First Project</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

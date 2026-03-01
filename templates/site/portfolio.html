@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Our Portfolio | {{ settings.business_name }}{% endblock %}
+{% block meta_description %}Browse our portfolio of completed kitchen remodels, bathroom renovations, and home restoration projects. See the quality craftsmanship that sets us apart.{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="page-header text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Portfolio</h1>
+    <p class="text-xl text-gray-200 max-w-2xl mx-auto">Browse our recent projects and see the quality craftsmanship we bring to every home.</p>
+  </div>
+</section>
+
+<!-- Filter + Grid -->
+<section class="py-20 bg-gray-light">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Category Filter Buttons -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12">
+      <button class="filter-btn active" data-filter="all">All</button>
+      {% for category in portfolio_categories %}
+      <button class="filter-btn" data-filter="{{ category }}">{{ category }}</button>
+      {% endfor %}
+    </div>
+
+    <!-- Portfolio Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
+      {% for project in portfolio %}
+      <a href="/portfolio/{{ project.slug }}.html" class="portfolio-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 block" data-category="{{ project.category }}">
+        <div class="bg-navy-light h-56 flex items-center justify-center">
+          <span class="text-6xl text-gold opacity-50">&#9633;</span>
+        </div>
+        <div class="p-6">
+          <span class="text-sm text-gold font-semibold uppercase tracking-wide">{{ project.category }}</span>
+          <h3 class="text-xl font-bold text-navy mt-1 mb-2">{{ project.title }}</h3>
+          <p class="text-gray-600 text-sm">{{ project.short_description }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20 bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Like What You See?</h2>
+    <p class="text-xl text-gray-300 mb-8">Let us bring the same quality craftsmanship to your home.</p>
+    <a href="/quote.html" class="bg-gold hover:bg-gold-light text-white px-8 py-4 rounded text-lg font-semibold transition-colors inline-block">
+      Request a Free Estimate
+    </a>
+  </div>
+</section>
+
+{% endblock %}

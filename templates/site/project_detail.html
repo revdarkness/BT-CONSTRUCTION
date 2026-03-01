@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }} | {{ settings.business_name }}{% endblock %}
+{% block meta_description %}{{ item.short_description }}{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="bg-gray-100 py-3">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="text-sm text-gray-500">
+      <a href="/" class="hover:text-navy">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/portfolio.html" class="hover:text-navy">Portfolio</a>
+      <span class="mx-2">/</span>
+      <span class="text-navy font-medium">{{ item.title }}</span>
+    </nav>
+  </div>
+</div>
+
+<!-- Project Detail -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Main Content -->
+      <div class="lg:col-span-2">
+        <h1 class="text-3xl md:text-4xl font-bold text-navy mb-6">{{ item.title }}</h1>
+
+        <!-- Image Gallery -->
+        {% if item.images %}
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+          {% for image in item.images %}
+          <div class="rounded-lg overflow-hidden cursor-pointer" data-lightbox="{{ image }}">
+            <img src="{{ image }}" alt="{{ item.title }} - Image {{ loop.index }}"
+                 class="w-full h-40 object-cover hover:scale-105 transition-transform duration-300">
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- YouTube Video -->
+        {% if item.youtube_url %}
+        <div class="mb-8">
+          <div class="relative w-full" style="padding-bottom: 56.25%;">
+            <iframe class="absolute inset-0 w-full h-full rounded-lg"
+                    src="https://www.youtube.com/embed/{{ item.youtube_url | replace('https://www.youtube.com/watch?v=', '') | replace('https://youtu.be/', '') | replace('https://youtube.com/watch?v=', '') }}"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Before/After Slider -->
+        {% if item.before_after and item.before_image and item.after_image %}
+        <h2 class="text-2xl font-bold text-navy mb-4">Before &amp; After</h2>
+        <div class="before-after-container relative w-full h-80 bg-gray-200 rounded-lg overflow-hidden mb-8">
+          <div class="before-after-before absolute inset-0">
+            <img src="{{ item.before_image }}" alt="Before" class="w-full h-full object-cover">
+          </div>
+          <div class="before-after-after absolute inset-0" style="clip-path: inset(0 0 0 50%);">
+            <img src="{{ item.after_image }}" alt="After" class="w-full h-full object-cover">
+          </div>
+          <div class="before-after-slider absolute top-0 bottom-0 w-1 bg-gold cursor-ew-resize" style="left: 50%;">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-gold rounded-full flex items-center justify-center shadow-lg">
+              <span class="text-white text-sm font-bold">&harr;</span>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Description -->
+        <div class="prose">
+          <p class="text-gray-700 text-lg leading-relaxed">{{ item.description }}</p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div>
+        <div class="bg-gray-light rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-bold text-navy mb-4">Project Details</h3>
+          <dl class="space-y-3">
+            <div>
+              <dt class="text-sm text-gray-500">Category</dt>
+              <dd class="font-medium text-navy">{{ item.category }}</dd>
+            </div>
+            {% if item.completion_date %}
+            <div>
+              <dt class="text-sm text-gray-500">Completed</dt>
+              <dd class="font-medium text-navy">{{ item.completion_date }}</dd>
+            </div>
+            {% endif %}
+            {% if item.location %}
+            <div>
+              <dt class="text-sm text-gray-500">Location</dt>
+              <dd class="font-medium text-navy">{{ item.location }}</dd>
+            </div>
+            {% endif %}
+          </dl>
+        </div>
+
+        <div class="bg-navy text-white rounded-lg p-8">
+          <h3 class="text-xl font-bold mb-4">Want Similar Results?</h3>
+          <p class="text-gray-300 mb-6">Let us bring the same quality craftsmanship to your project.</p>
+          <a href="/quote.html" class="bg-gold hover:bg-gold-light text-white px-6 py-3 rounded font-semibold transition-colors block text-center mb-4">
+            Request a Quote
+          </a>
+          <a href="tel:{{ settings.phone }}" class="border-2 border-white hover:bg-white hover:text-navy text-white px-6 py-3 rounded font-semibold transition-colors block text-center">
+            Call {{ settings.phone }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Projects -->
+    {% set related = [] %}
+    {% for project in portfolio %}
+      {% if project.category == item.category and project.slug != item.slug %}
+        {% if related.append(project) %}{% endif %}
+      {% endif %}
+    {% endfor %}
+    {% if related %}
+    <div class="mt-16">
+      <h2 class="text-2xl font-bold text-navy mb-6">More {{ item.category }} Projects</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for project in related %}
+        <a href="/portfolio/{{ project.slug }}.html" class="portfolio-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 block">
+          {% if project.images %}
+          <img src="{{ project.images[0] }}" alt="{{ project.title }}" class="w-full h-40 object-cover">
+          {% else %}
+          <div class="bg-navy-light h-40 flex items-center justify-center">
+            <span class="text-5xl text-gold opacity-50">&#9633;</span>
+          </div>
+          {% endif %}
+          <div class="p-4">
+            <h3 class="font-bold text-navy">{{ project.title }}</h3>
+            <p class="text-sm text-gray-600 mt-1">{{ project.short_description }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

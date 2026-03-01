@@ -1,0 +1,101 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+
+    <!-- Navigation cards grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+
+        <!-- Portfolio -->
+        <a href="{{ url_for('portfolio_list') }}" class="admin-card group">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-3xl">🏗️</span>
+                <span class="text-3xl font-bold text-navy">{{ counts.portfolio }}</span>
+            </div>
+            <h3 class="text-xl font-bold text-navy group-hover:text-gold transition">Portfolio</h3>
+            <p class="text-gray-500 mt-1">Manage project showcases</p>
+        </a>
+
+        <!-- Testimonials -->
+        <a href="{{ url_for('testimonials_list') }}" class="admin-card group">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-3xl">⭐</span>
+                <span class="text-3xl font-bold text-navy">{{ counts.testimonials }}</span>
+            </div>
+            <h3 class="text-xl font-bold text-navy group-hover:text-gold transition">Testimonials</h3>
+            <p class="text-gray-500 mt-1">Manage client reviews</p>
+        </a>
+
+        <!-- Services -->
+        <a href="{{ url_for('services_list') }}" class="admin-card group">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-3xl">🔧</span>
+                <span class="text-3xl font-bold text-navy">{{ counts.services }}</span>
+            </div>
+            <h3 class="text-xl font-bold text-navy group-hover:text-gold transition">Services</h3>
+            <p class="text-gray-500 mt-1">Manage service offerings</p>
+        </a>
+
+        <!-- Blog Posts -->
+        <a href="{{ url_for('blog_list') }}" class="admin-card group">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-3xl">📝</span>
+                <span class="text-3xl font-bold text-navy">{{ counts.blog }}</span>
+            </div>
+            <h3 class="text-xl font-bold text-navy group-hover:text-gold transition">Blog Posts</h3>
+            <p class="text-gray-500 mt-1">Manage blog content</p>
+        </a>
+
+        <!-- Contact Submissions -->
+        <a href="{{ url_for('contact_list') }}" class="admin-card group relative">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-3xl">📬</span>
+                <span class="text-3xl font-bold text-navy">{{ counts.contact }}</span>
+            </div>
+            {% if unread.contact > 0 %}
+            <span class="unread-badge">{{ unread.contact }} new</span>
+            {% endif %}
+            <h3 class="text-xl font-bold text-navy group-hover:text-gold transition">Contact Messages</h3>
+            <p class="text-gray-500 mt-1">View contact form submissions</p>
+        </a>
+
+        <!-- Quote Requests -->
+        <a href="{{ url_for('quotes_list') }}" class="admin-card group relative">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-3xl">📋</span>
+                <span class="text-3xl font-bold text-navy">{{ counts.quotes }}</span>
+            </div>
+            {% if unread.quotes > 0 %}
+            <span class="unread-badge">{{ unread.quotes }} new</span>
+            {% endif %}
+            <h3 class="text-xl font-bold text-navy group-hover:text-gold transition">Quote Requests</h3>
+            <p class="text-gray-500 mt-1">View quote request submissions</p>
+        </a>
+
+    </div>
+
+    <!-- Rebuild section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-lg font-bold text-navy">Site Rebuild</h3>
+                {% if last_rebuild %}
+                <p class="text-gray-500 mt-1">Last rebuilt: <strong>{{ last_rebuild }}</strong></p>
+                {% else %}
+                <p class="text-gray-500 mt-1">Site has not been rebuilt from the admin panel yet.</p>
+                {% endif %}
+            </div>
+            <form method="POST" action="{{ url_for('rebuild') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="rebuild-btn">
+                    Rebuild Site
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

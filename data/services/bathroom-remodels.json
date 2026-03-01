@@ -1,0 +1,16 @@
+{
+  "slug": "bathroom-remodels",
+  "title": "Bathroom Remodels",
+  "short_description": "Upgrade your bathroom with elegant tile work, custom vanities, and modern fixtures that add comfort and value to your home.",
+  "description": "Whether you want a spa-like master bath or a practical family bathroom, BT Construction brings expert craftsmanship to every bathroom remodel. We handle tile, plumbing, vanities, showers, tubs, and all the finishing touches.",
+  "icon": "bathroom",
+  "featured": true,
+  "image": "/static/img/placeholder-bathroom.jpg",
+  "features": [
+    "Custom tile showers and surrounds",
+    "Vanity and countertop installation",
+    "Walk-in shower conversions",
+    "Accessibility modifications",
+    "Plumbing and fixture upgrades"
+  ]
+}
