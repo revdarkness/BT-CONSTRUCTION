@@ -1,8 +1,8 @@
 {
   "business_name": "BT Construction LLC",
   "tagline": "Quality Craftsmanship, Lasting Results",
-  "phone": "(555) 123-4567",
-  "email": "info@btconstructionllc.com",
+  "phone": "(214) 796-2119",
+  "email": "info@btconstructiontx.com",
   "address": {
     "street": "2303 Elderoaks Ln",
     "city": "Dallas",
@@ -16,15 +16,27 @@
     "Arlington"
   ],
   "years_experience": 50,
-  "license_number": "LIC-123456",
+  "license_number": "",
   "social": {
     "facebook": "",
-    "instagram": "",
+    "instagram": "https://www.instagram.com/berrydallasrealty/",
     "google_business": ""
   },
   "seo": {
     "title": "BT Construction LLC | 50 Years of Quality Craftsmanship",
     "description": "BT Construction LLC brings 50 years of experience to kitchen remodels, bathroom remodels, and full home renovations. Quality craftsmanship, lasting results.",
-    "og_image": "/static/img/og-default.jpg"
-  }
+    "og_image": "/static/img/uploads/1772382550-bt-logo.png"
+  },
+  "colors": {
+    "primary": "#1B3A5C",
+    "secondary": "#C8963E",
+    "accent": "#D4A94F"
+  },
+  "smtp": {
+    "host": "",
+    "port": 587,
+    "user": "calvin",
+    "password": "btconstruction2024"
+  },
+  "notification_email": ""
 }

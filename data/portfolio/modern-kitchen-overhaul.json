@@ -3,14 +3,20 @@
   "title": "Modern Kitchen Overhaul",
   "category": "Kitchen Remodel",
   "short_description": "A complete kitchen transformation featuring custom white shaker cabinets, quartz countertops, and a spacious island with seating.",
-  "description": "This dated 1990s kitchen was completely gutted and rebuilt with a modern open layout. The homeowners wanted a bright, functional space for cooking and entertaining. We installed custom white shaker cabinets, quartz countertops, a large island with bar seating, and new hardwood flooring throughout.",
-  "featured": true,
+  "description": "This dated kitchen was remodeled by a previous owner.  Because the quality of work was below city code, we completely gutted and rebuilt this kitchen and several additional parts of this home with a truly open and modern layout. Our goal was to deliver a bright, functional space for cooking and entertaining. We installed custom built, two tone shaker cabinets, quartz countertops, a large island with bar seating, and new hardwood flooring throughout.",
   "completion_date": "2024-06-15",
-  "location": "Your City, ST",
+  "location": "Dallas, TX",
+  "featured": true,
   "images": [
-    "/static/img/placeholder-portfolio-1.jpg"
+    "/static/img/uploads/1772399307-img20220911082202.jpg",
+    "/static/img/uploads/1772399318-img20220911082134.jpg",
+    "/static/img/uploads/1772399341-img20220906204545.jpg",
+    "/static/img/uploads/1772399371-img-20220215-192046.jpg",
+    "/static/img/uploads/1772399385-img-20220226-153703.jpg",
+    "/static/img/uploads/1772399432-img-20220605-105021.jpg"
   ],
   "before_after": true,
-  "before_image": "/static/img/placeholder-kitchen-before.jpg",
-  "after_image": "/static/img/placeholder-kitchen-after.jpg"
+  "before_image": "/static/img/uploads/1772383202-img-20220206-151000-1.jpg",
+  "after_image": "/static/img/uploads/1772383255-img20220911082101.jpg",
+  "youtube_url": ""
 }
