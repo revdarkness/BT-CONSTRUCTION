@@ -65,9 +65,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {% for project in related %}
           <a href="/portfolio/{{ project.slug }}.html" class="portfolio-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 block">
+            {% if project.images %}
+            <img src="{{ project.images[0] }}" alt="{{ project.title }}" class="w-full h-40 object-cover">
+            {% else %}
             <div class="bg-navy-light h-40 flex items-center justify-center">
               <span class="text-5xl text-gold opacity-50">&#9633;</span>
             </div>
+            {% endif %}
             <div class="p-4">
               <h3 class="font-bold text-navy">{{ project.title }}</h3>
               <p class="text-sm text-gray-600 mt-1">{{ project.short_description }}</p>
