@@ -162,6 +162,47 @@
             </div>
         </div>
 
+        <!-- Email Notifications -->
+        <div class="settings-section">
+            <h3>Email Notifications</h3>
+            <p class="text-sm text-gray-500 mb-4">Configure SMTP to receive email alerts when contact or quote forms are submitted. Leave blank to disable.</p>
+
+            <div class="form-group">
+                <label for="smtp_host">SMTP Host</label>
+                <input type="text" id="smtp_host" name="smtp_host" class="form-input"
+                       value="{{ settings.smtp.host if settings.smtp else '' }}"
+                       placeholder="e.g. smtp.gmail.com">
+            </div>
+
+            <div class="form-group">
+                <label for="smtp_port">SMTP Port</label>
+                <input type="number" id="smtp_port" name="smtp_port" class="form-input"
+                       value="{{ settings.smtp.port if settings.smtp else '587' }}"
+                       placeholder="587">
+            </div>
+
+            <div class="form-group">
+                <label for="smtp_user">SMTP Username</label>
+                <input type="text" id="smtp_user" name="smtp_user" class="form-input"
+                       value="{{ settings.smtp.user if settings.smtp else '' }}"
+                       placeholder="your-email@gmail.com">
+            </div>
+
+            <div class="form-group">
+                <label for="smtp_password">SMTP Password</label>
+                <input type="password" id="smtp_password" name="smtp_password" class="form-input"
+                       value="{{ settings.smtp.password if settings.smtp else '' }}"
+                       placeholder="App password or SMTP password">
+            </div>
+
+            <div class="form-group">
+                <label for="notification_email">Notification Email</label>
+                <input type="email" id="notification_email" name="notification_email" class="form-input"
+                       value="{{ settings.notification_email or '' }}"
+                       placeholder="Where to send form alerts">
+            </div>
+        </div>
+
         <!-- Service Areas -->
         <div class="settings-section">
             <h3>Service Areas</h3>

@@ -187,22 +187,39 @@ document.addEventListener('DOMContentLoaded', function () {
         ? 'Thank you! Your quote request has been submitted. We\'ll be in touch within one business day.'
         : 'Thank you for your message! We\'ll get back to you soon.';
 
-      // Collect form data as JSON
-      var payload = {};
-      var fields = form.querySelectorAll('input, textarea, select');
-      fields.forEach(function (field) {
-        if (field.name) payload[field.name] = field.value.trim();
-      });
+      // Check for file inputs with files selected
+      var fileInput = form.querySelector('input[type="file"]');
+      var hasFiles = fileInput && fileInput.files && fileInput.files.length > 0;
+
+      var fetchOpts = { method: 'POST' };
+
+      if (hasFiles) {
+        // Use FormData for multipart upload
+        var formData = new FormData();
+        var fields = form.querySelectorAll('input:not([type="file"]), textarea, select');
+        fields.forEach(function (field) {
+          if (field.name) formData.append(field.name, field.value.trim());
+        });
+        for (var i = 0; i < fileInput.files.length; i++) {
+          formData.append('photos', fileInput.files[i]);
+        }
+        fetchOpts.body = formData;
+      } else {
+        // Collect form data as JSON
+        var payload = {};
+        var fields = form.querySelectorAll('input, textarea, select');
+        fields.forEach(function (field) {
+          if (field.name) payload[field.name] = field.value.trim();
+        });
+        fetchOpts.headers = { 'Content-Type': 'application/json' };
+        fetchOpts.body = JSON.stringify(payload);
+      }
 
       // Disable submit button
       var submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) submitBtn.disabled = true;
 
-      fetch(apiBase + endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      fetch(apiBase + endpoint, fetchOpts)
         .then(function (res) { return res.json().then(function (d) { return { ok: res.ok, data: d }; }); })
         .then(function (result) {
           if (result.ok) {

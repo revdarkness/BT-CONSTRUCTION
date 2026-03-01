@@ -4,7 +4,10 @@ import os
 import re
 import json
 import time
+import smtplib
+import threading
 from datetime import datetime, timedelta
+from email.mime.text import MIMEText
 from functools import wraps
 
 import bcrypt
@@ -92,6 +95,50 @@ def _save_rebuild_timestamp():
 
 def _today():
     return datetime.now().strftime("%Y-%m-%d")
+
+
+def _load_settings():
+    """Load settings.json and return dict (empty dict if missing)."""
+    if os.path.isfile(Config.SETTINGS_FILE):
+        with open(Config.SETTINGS_FILE, "r", encoding="utf-8") as fh:
+            return json.load(fh)
+    return {}
+
+
+def send_notification_email(subject, body, reply_to=None):
+    """Send an email notification in a background thread.
+
+    Reads SMTP config from settings.json. Silently skips if not configured.
+    """
+    settings = _load_settings()
+    smtp = settings.get("smtp", {})
+    to_email = settings.get("notification_email", "").strip()
+
+    host = (smtp.get("host") or "").strip()
+    user = (smtp.get("user") or "").strip()
+    password = (smtp.get("password") or "").strip()
+    port = int(smtp.get("port") or 587)
+
+    if not host or not user or not to_email:
+        return  # SMTP not configured, skip silently
+
+    def _send():
+        try:
+            msg = MIMEText(body)
+            msg["Subject"] = subject
+            msg["From"] = user
+            msg["To"] = to_email
+            if reply_to:
+                msg["Reply-To"] = reply_to
+
+            with smtplib.SMTP(host, port, timeout=10) as server:
+                server.starttls()
+                server.login(user, password)
+                server.sendmail(user, [to_email], msg.as_string())
+        except Exception:
+            pass  # Fail silently — don't break form submission
+
+    threading.Thread(target=_send, daemon=True).start()
 
 
 # ---------------------------------------------------------------------------
@@ -646,6 +693,13 @@ def admin_settings():
                 "secondary": request.form.get("color_secondary", "#C8963E").strip(),
                 "accent": request.form.get("color_accent", "#D4A94F").strip(),
             },
+            "smtp": {
+                "host": request.form.get("smtp_host", "").strip(),
+                "port": int(request.form.get("smtp_port", 587) or 587),
+                "user": request.form.get("smtp_user", "").strip(),
+                "password": request.form.get("smtp_password", "").strip(),
+            },
+            "notification_email": request.form.get("notification_email", "").strip(),
         }
         with open(Config.SETTINGS_FILE, "w", encoding="utf-8") as fh:
             json.dump(data, fh, indent=2, ensure_ascii=False)
@@ -677,6 +731,10 @@ def submit_contact():
     data = request.get_json(silent=True)
     if not data:
         return jsonify({"error": "Invalid request."}), 400
+
+    # Honeypot check — bots fill this, humans never see it
+    if (data.get("website") or "").strip():
+        return jsonify({"ok": True})
 
     name = (data.get("name") or "").strip()
     email = (data.get("email") or "").strip()
@@ -711,6 +769,21 @@ def submit_contact():
         "read": False,
     }
     dm.save_item(Config.CONTACT_DIR, slug, item)
+
+    # Send email notification
+    email_body = (
+        f"New contact form submission:\n\n"
+        f"Name: {name}\n"
+        f"Email: {email}\n"
+        f"Phone: {phone or 'Not provided'}\n\n"
+        f"Message:\n{message}\n"
+    )
+    send_notification_email(
+        f"New Contact Message — {name}",
+        email_body,
+        reply_to=email,
+    )
+
     return jsonify({"ok": True})
 
 
@@ -721,9 +794,16 @@ def submit_quote():
     if _is_rate_limited(ip, "submit", SUBMISSION_RATE_LIMIT_MAX, SUBMISSION_RATE_LIMIT_WINDOW):
         return jsonify({"error": "Too many submissions. Please try again later."}), 429
 
-    data = request.get_json(silent=True)
-    if not data:
-        return jsonify({"error": "Invalid request."}), 400
+    # Support both JSON and multipart (when photos are attached)
+    is_multipart = request.content_type and "multipart/form-data" in request.content_type
+    if is_multipart:
+        data = request.form
+    else:
+        data = request.get_json(silent=True) or {}
+
+    # Honeypot check — bots fill this, humans never see it
+    if (data.get("website") or "").strip():
+        return jsonify({"ok": True})
 
     name = (data.get("name") or "").strip()
     email = (data.get("email") or "").strip()
@@ -752,6 +832,31 @@ def submit_quote():
 
     _record_attempt(ip, "submit")
 
+    # Process uploaded photos (if multipart)
+    photo_paths = []
+    if is_multipart:
+        photos = request.files.getlist("photos")
+        upload_dir = os.path.join(Config.STATIC_DIR, "img", "uploads")
+        os.makedirs(upload_dir, exist_ok=True)
+
+        for i, photo in enumerate(photos[:5]):  # max 5 photos
+            if not photo.filename:
+                continue
+            ext = photo.filename.rsplit(".", 1)[-1].lower() if "." in photo.filename else ""
+            if ext not in ALLOWED_EXTENSIONS:
+                continue
+            file_data = photo.read()
+            if len(file_data) > MAX_UPLOAD_SIZE:
+                continue
+            safe_name = re.sub(r"[^a-z0-9]+", "-",
+                               os.path.splitext(photo.filename)[0].lower()).strip("-") or "photo"
+            timestamp_val = int(time.time())
+            filename = f"{timestamp_val}-{safe_name}-{i}.{ext}"
+            filepath = os.path.join(upload_dir, filename)
+            with open(filepath, "wb") as fh:
+                fh.write(file_data)
+            photo_paths.append(f"/static/img/uploads/{filename}")
+
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     slug = dm.generate_slug(name) + "-" + str(int(time.time()))
     slug = dm.ensure_unique_slug(Config.QUOTES_DIR, slug)
@@ -766,10 +871,32 @@ def submit_quote():
         "description": description,
         "timeline": timeline,
         "budget": budget,
+        "photos": photo_paths,
         "date": timestamp,
         "read": False,
     }
     dm.save_item(Config.QUOTES_DIR, slug, item)
+
+    # Send email notification
+    email_body = (
+        f"New quote request:\n\n"
+        f"Name: {name}\n"
+        f"Email: {email}\n"
+        f"Phone: {phone}\n"
+        f"City: {city or 'Not provided'}\n"
+        f"Service: {service}\n"
+        f"Timeline: {timeline or 'Not specified'}\n"
+        f"Budget: {budget or 'Not specified'}\n\n"
+        f"Description:\n{description}\n"
+    )
+    if photo_paths:
+        email_body += "\nPhotos:\n" + "\n".join(photo_paths) + "\n"
+    send_notification_email(
+        f"New Quote Request — {service}",
+        email_body,
+        reply_to=email,
+    )
+
     return jsonify({"ok": True})
 
 

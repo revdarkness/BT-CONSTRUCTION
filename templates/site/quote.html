@@ -60,7 +60,17 @@
                 <label for="quote-description" class="block text-sm font-medium text-gray-700 mb-1">Project Description *</label>
                 <textarea id="quote-description" name="description" rows="4" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Tell us about your project — what rooms, what changes, any specific materials or features you're interested in..."></textarea>
               </div>
+              <div>
+                <label for="quote-photos" class="block text-sm font-medium text-gray-700 mb-1">Project Photos</label>
+                <input type="file" id="quote-photos" name="photos" multiple accept="image/*" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg">
+                <p class="text-xs text-gray-500 mt-1">Up to 5 images, 10MB each (JPG, PNG, GIF, WebP)</p>
+              </div>
             </div>
+          </div>
+
+          <div class="hp-field" aria-hidden="true">
+            <label for="quote-website">Website</label>
+            <input type="text" id="quote-website" name="website" tabindex="-1" autocomplete="off">
           </div>
 
           <!-- Timeline -->
