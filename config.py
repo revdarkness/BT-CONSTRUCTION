@@ -22,6 +22,7 @@ class Config:
     BLOG_DIR = os.path.join(DATA_DIR, "blog")
     SUBMISSIONS_DIR = os.path.join(DATA_DIR, "submissions")
     SETTINGS_FILE = os.path.join(DATA_DIR, "settings.json")
+    ABOUT_FILE = os.path.join(DATA_DIR, "about.json")
 
     # Admin
     ADMIN_CONFIG_FILE = os.path.join(BASE_DIR, "admin_config.py")

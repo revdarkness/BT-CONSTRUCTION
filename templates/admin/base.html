@@ -43,6 +43,9 @@
             <a href="{{ url_for('blog_list') }}" class="sidebar-link {% if request.endpoint in ('blog_list', 'blog_new', 'blog_edit') %}active{% endif %}">
                 <span class="text-lg mr-3">📝</span> Blog Posts
             </a>
+            <a href="{{ url_for('admin_about') }}" class="sidebar-link {% if request.endpoint == 'admin_about' %}active{% endif %}">
+                <span class="text-lg mr-3">📄</span> About Page
+            </a>
             <hr class="border-navy-light my-3">
             <a href="{{ url_for('contact_list') }}" class="sidebar-link {% if request.endpoint in ('contact_list', 'contact_detail') %}active{% endif %}">
                 <span class="text-lg mr-3">📬</span> Contact Messages

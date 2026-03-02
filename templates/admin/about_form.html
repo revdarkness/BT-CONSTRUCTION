@@ -1,0 +1,100 @@
+{% extends "admin/base.html" %}
+{% from "admin/partials/image_upload.html" import image_field, upload_script %}
+
+{% block title %}About Page{% endblock %}
+{% block page_title %}About Page{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <!-- Main Story -->
+        <div class="settings-section">
+            <h3>Main Story</h3>
+
+            <div class="form-group">
+                <label for="headline">Headline</label>
+                <input type="text" id="headline" name="headline" class="form-input"
+                       value="{{ about.headline or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="story">Story</label>
+                <textarea id="story" name="story" class="form-textarea" rows="8">{{ about.story or '' }}</textarea>
+            </div>
+
+            {{ image_field("story_image", about.story_image or '', "Story Image") }}
+        </div>
+
+        <!-- Core Values -->
+        <div class="settings-section">
+            <h3>Core Values</h3>
+            <div id="core-values-list">
+                {% for val in about.get('core_values', []) %}
+                <div class="array-row" style="flex-wrap:wrap; gap:0.5rem;">
+                    <input type="text" name="cv_title" class="form-input" value="{{ val.title }}" placeholder="Title" style="flex:1; min-width:120px;">
+                    <input type="text" name="cv_icon" class="form-input" value="{{ val.icon }}" placeholder="Icon (e.g. shield)" style="flex:0 0 160px;">
+                    <button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>
+                    <textarea name="cv_description" class="form-textarea" rows="2" placeholder="Description" style="width:100%;">{{ val.description }}</textarea>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn-secondary btn-sm mt-2" onclick="addCoreValue()">+ Add Core Value</button>
+        </div>
+
+        <!-- Milestones -->
+        <div class="settings-section">
+            <h3>Milestones</h3>
+            <div id="milestones-list">
+                {% for ms in about.get('milestones', []) %}
+                <div class="array-row" style="flex-wrap:wrap; gap:0.5rem;">
+                    <input type="text" name="ms_year" class="form-input" value="{{ ms.year }}" placeholder="Year" style="flex:0 0 100px;">
+                    <input type="text" name="ms_title" class="form-input" value="{{ ms.title }}" placeholder="Title" style="flex:1; min-width:120px;">
+                    <button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>
+                    <textarea name="ms_description" class="form-textarea" rows="2" placeholder="Description" style="width:100%;">{{ ms.description }}</textarea>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn-secondary btn-sm mt-2" onclick="addMilestone()">+ Add Milestone</button>
+        </div>
+
+        <div class="flex items-center gap-4 mt-6">
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+    </form>
+
+</div>
+
+{{ upload_script() }}
+<script>
+function addCoreValue() {
+    var list = document.getElementById('core-values-list');
+    var row = document.createElement('div');
+    row.className = 'array-row';
+    row.style.cssText = 'flex-wrap:wrap; gap:0.5rem;';
+    row.innerHTML =
+        '<input type="text" name="cv_title" class="form-input" placeholder="Title" style="flex:1; min-width:120px;">' +
+        '<input type="text" name="cv_icon" class="form-input" placeholder="Icon (e.g. shield)" style="flex:0 0 160px;">' +
+        '<button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>' +
+        '<textarea name="cv_description" class="form-textarea" rows="2" placeholder="Description" style="width:100%;"></textarea>';
+    list.appendChild(row);
+    row.querySelector('input').focus();
+}
+
+function addMilestone() {
+    var list = document.getElementById('milestones-list');
+    var row = document.createElement('div');
+    row.className = 'array-row';
+    row.style.cssText = 'flex-wrap:wrap; gap:0.5rem;';
+    row.innerHTML =
+        '<input type="text" name="ms_year" class="form-input" placeholder="Year" style="flex:0 0 100px;">' +
+        '<input type="text" name="ms_title" class="form-input" placeholder="Title" style="flex:1; min-width:120px;">' +
+        '<button type="button" class="array-remove" onclick="this.parentElement.remove()">&times;</button>' +
+        '<textarea name="ms_description" class="form-textarea" rows="2" placeholder="Description" style="width:100%;"></textarea>';
+    list.appendChild(row);
+    row.querySelector('input').focus();
+}
+</script>
+{% endblock %}

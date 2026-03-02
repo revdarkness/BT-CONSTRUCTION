@@ -716,6 +716,54 @@ def admin_settings():
 
 
 # ---------------------------------------------------------------------------
+# Routes — About Page
+# ---------------------------------------------------------------------------
+@app.route("/admin/about", methods=["GET", "POST"])
+@login_required
+def admin_about():
+    if request.method == "POST":
+        # Core values array
+        cv_titles = request.form.getlist("cv_title")
+        cv_descriptions = request.form.getlist("cv_description")
+        cv_icons = request.form.getlist("cv_icon")
+        core_values = []
+        for title, desc, icon in zip(cv_titles, cv_descriptions, cv_icons):
+            title, desc, icon = title.strip(), desc.strip(), icon.strip()
+            if title or desc:
+                core_values.append({"title": title, "description": desc, "icon": icon})
+
+        # Milestones array
+        ms_years = request.form.getlist("ms_year")
+        ms_titles = request.form.getlist("ms_title")
+        ms_descriptions = request.form.getlist("ms_description")
+        milestones = []
+        for year, title, desc in zip(ms_years, ms_titles, ms_descriptions):
+            year, title, desc = year.strip(), title.strip(), desc.strip()
+            if year or title:
+                milestones.append({"year": year, "title": title, "description": desc})
+
+        data = {
+            "headline": request.form.get("headline", "").strip(),
+            "story": request.form.get("story", "").strip(),
+            "story_image": request.form.get("story_image", "").strip(),
+            "core_values": core_values,
+            "milestones": milestones,
+        }
+        with open(Config.ABOUT_FILE, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, indent=2, ensure_ascii=False)
+            fh.write("\n")
+        flash("About page saved!", "success")
+        return redirect(url_for("admin_about"))
+
+    # GET — load current about data
+    about = {}
+    if os.path.isfile(Config.ABOUT_FILE):
+        with open(Config.ABOUT_FILE, "r", encoding="utf-8") as fh:
+            about = json.load(fh)
+    return render_template("admin/about_form.html", about=about)
+
+
+# ---------------------------------------------------------------------------
 # Routes — Public Form Submissions (no login required)
 # ---------------------------------------------------------------------------
 _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
